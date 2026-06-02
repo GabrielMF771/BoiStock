@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Painel - BoiStock</title>
+    <link rel="stylesheet" href="/dashboard/css/dashboard-style.css">
+    <script src="/dashboard/js/theme.js"></script>
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <aside class="sidebar">
+            <div class="profile">
+                <div class="avatar">🐂</div>
+                <h3>BoiStock</h3>
+                <p>Gestão Agropecuária</p>
+            </div>
+
+            <nav>
+                <a href="/dashboard">🏠 Dashboard</a>
+                <a href="/dashboard/products">📦 Produtos</a>
+                <a href="/dashboard/settings">⚙️ Configurações</a>
+            </nav>
+            <div class="theme-switch-wrapper">
+                <button id="theme-toggle" class="theme-toggle-btn" title="Alternar Tema">
+                    <span class="icon-sun">☀️</span>
+                    <span class="icon-moon">🌙</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+
+            <header class="topbar">
+                <h1>Dashboard Principal</h1>
+                <span>🌱 Bem-vindo ao BoiStock</span>
+            </header>
+
+            <section class="stats-grid">
+
+                <div class="stat-card">
+                    <h3>Total de Produtos</h3>
+                    <p id="total-products">0</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Estoque Baixo</h3>
+                    <p id="low-stock">0</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Valor em Estoque</h3>
+                    <p id="stock-value">R$ 0,00</p>
+                </div>
+
+            </section>
+
+            <section class="content-grid">
+                <div class="summary-card">
+                    <h2>Disponibilidade</h2>
+
+                    <div class="progress-circle">
+                        <span>78%</span>
+                    </div>
+
+                    <p>Produtos disponíveis para venda.</p>
+
+                    <br>
+
+                    <a href="/dashboard/products" class="btn-primary">
+                        Gerenciar Estoque
+                    </a>
+
+                </div>
+
+                <div class="stat-card">
+                    <h3>Estoque Crítico</h3>
+                    <p id="critical-stock">0</p>
+                    <ul id="critical-products">
+                        <li>Nenhum produto crítico</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="activity-card">
+
+                <h2>Últimas Atividades</h2>
+
+                <ul class="activity-list" id="activity-list">
+                </ul>
+
+            </section>
+        </main>
+    </div>
+
+    <script src="/dashboard/js/dashboard.js"></script>
+</body>
+
+</html>

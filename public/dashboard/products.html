@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Estoque - BoiStock</title>
+    <link rel="stylesheet" href="/dashboard/css/dashboard-style.css">
+    <script src="/dashboard/js/theme.js"></script>
+
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <aside class="sidebar">
+            <div class="profile">
+                <div class="avatar">🐂</div>
+                <h3>BoiStock</h3>
+                <p>Gestão Agropecuária</p>
+            </div>
+
+            <nav>
+                <a href="/dashboard">🏠 Dashboard</a>
+                <a href="/dashboard/products">📦 Produtos</a>
+                <a href="/dashboard/settings">⚙️ Configurações</a>
+            </nav>
+            <div class="theme-switch-wrapper">
+                <button id="theme-toggle" class="theme-toggle-btn" title="Alternar Tema">
+                    <span class="icon-sun">☀️</span>
+                    <span class="icon-moon">🌙</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+
+            <header class="topbar">
+                <h1>Inventário de Produtos</h1>
+                <span>Gerencie todo o estoque da fazenda</span>
+            </header>
+
+            <div class="product-toolbar">
+                <a href="/dashboard/products/add" class="btn-primary add-product-btn">
+                    + Cadastrar Produto
+                </a>
+            </div>
+
+            <div class="table-card">
+                <div class="table-header">
+                    <h2>Itens Cadastrados</h2>
+                </div>
+
+                <ul id="products-list"></ul>
+            </div>
+        </main>
+    </div>
+
+    <div id="delete-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-icon">⚠️</div>
+            <h2>Excluir Produto</h2>
+            <p>Tem certeza que deseja deletar este produto? Esta ação não poderá ser desfeita.</p>
+            <div class="modal-actions">
+                <button id="btn-cancel-delete" class="cancel-btn">Descartar</button>
+                <button id="btn-confirm-delete" class="delete-btn">✖ Confirmar Exclusão</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/dashboard/js/products.js"></script>
+</body>
+
+</html>
