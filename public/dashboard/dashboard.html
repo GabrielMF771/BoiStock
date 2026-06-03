@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel - BoiStock</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
+    <link rel="manifest" href="/site.webmanifest">
     <link rel="stylesheet" href="/dashboard/css/dashboard-style.css">
     <script src="/dashboard/js/theme.js"></script>
 </head>
@@ -15,20 +18,33 @@
 
         <aside class="sidebar">
             <div class="profile">
-                <div class="avatar">🐂</div>
-                <h3>BoiStock</h3>
-                <p>Gestão Agropecuária</p>
+                <div class="avatar">
+                    <img src="/assets/images/image.png"
+                        style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                </div>
+
+                <div class="profile-info">
+                    <h3>AgroBoi - BoiStock</h3>
+                    <p>Gestão Agropecuária</p>
+                </div>
             </div>
 
             <nav>
-                <a href="/dashboard">🏠 Dashboard</a>
-                <a href="/dashboard/products">📦 Produtos</a>
-                <a href="/dashboard/settings">⚙️ Configurações</a>
+                <a href="/">
+                    <span class="material-icons-round">home</span> Início
+                </a>
+                <a href="/dashboard" class="active">
+                    <span class="material-icons-round">dashboard</span> Dashboard</a>
+                <a href="/dashboard/products">
+                    <span class="material-icons-round">inventory_2</span> Produtos</a>
+                <a href="/dashboard/settings">
+                    <span class="material-icons-round">settings</span> Configurações</a>
             </nav>
+
             <div class="theme-switch-wrapper">
                 <button id="theme-toggle" class="theme-toggle-btn" title="Alternar Tema">
-                    <span class="icon-sun">☀️</span>
-                    <span class="icon-moon">🌙</span>
+                    <span class="material-icons-round icon-sun">light_mode</span>
+                    <span class="material-icons-round icon-moon">dark_mode</span>
                 </button>
             </div>
         </aside>
@@ -37,7 +53,7 @@
 
             <header class="topbar">
                 <h1>Dashboard Principal</h1>
-                <span>🌱 Bem-vindo ao BoiStock</span>
+                <span>Bem-vindo ao BoiStock</span>
             </header>
 
             <section class="stats-grid">

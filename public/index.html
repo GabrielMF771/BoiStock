@@ -1,22 +1,87 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Início - BoiStock</title>
-    <link rel="stylesheet" href="/style.css">
+    <title>BoiStock - Inteligência na Gestão Agropecuária</title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+    <link rel="stylesheet" href="/style.css?v=2.0">
 </head>
-<body>
-    <div class="container">
-        <h1>BoiStock Home</h1>
 
-        <div class="welcome-container">
-            <h2 style="font-size: 28px; margin-bottom: 10px;">Gestão Simples & Eficiente</h2>
-            <p>Bem-vindo ao sistema líder para o gerenciamento de estoque na agropecuária.</p>
-            <a href="/dashboard" class="btn btn-primary" style="font-size: 18px; padding: 15px 30px;">Acessar Meu Painel</a>
+<body>
+
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="brand">
+                <div class="brand-logo"><img src="/assets/images/image.png"
+                        style="width: 100%; height: 100%;"></div>
+                <span>AgroBoi - BoiStock</span>
+            </div>
+            <a href="/dashboard" class="btn-nav">Acessar Painel</a>
         </div>
-    </div>  
+    </header>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>O controle total do seu estoque agropecuário na palma da mão.</h1>
+                <p>Monitore insumos, controle lotes de ração, vacinas e ferramentas em uma interface moderna, rápida e integrada com alertas automáticos de estoque crítico.</p>
+                <div class="hero-actions">
+                    <a href="/dashboard" class="btn-primary-lg">
+                        Iniciar Gerenciamento
+                        <span class="material-icons-round">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="features-container">
+            <h2>Por que escolher o BoiStock?</h2>
+            <p class="section-subtitle">Desenvolvido sob medida para as necessidades do produtor moderno.</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="material-icons-round">notifications_active</span>
+                    </div>
+                    <h3>Alertas de Estoque Crítico</h3>
+                    <p>Fique sabendo antes que falte. O sistema avisa automaticamente quando os insumos atingem o limite mínimo de segurança.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="material-icons-round">query_stats</span>
+                    </div>
+                    <h3>Métricas Financeiras</h3>
+                    <p>Visualização instantânea do valor total investido no seu inventário atualizado em tempo real com o banco de dados.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="material-icons-round">devices</span>
+                    </div>
+                    <h3>Interface Responsiva</h3>
+                    <p>Acesse o painel direto do trator, do pasto ou do escritório. Totalmente adaptado para computadores, tablets e celulares.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2026 BoiStock - Gestão Agropecuária Inteligente. Todos os direitos reservados.</p>
+            <div class="footer-authors">
+                <span>Desenvolvido por Gabriel, Esdras e Felipe</span>
+            </div>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>
+
 </html>

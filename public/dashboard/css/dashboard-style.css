@@ -101,35 +101,48 @@ body {
 }
 
 .profile {
-    text-align: left;
+    display: flex;
+    align-items: center; 
+    gap: 12px;           
     margin-bottom: 40px;
     padding-bottom: 24px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .avatar {
-    font-size: 28px;
-    margin-bottom: 16px;
     background: rgba(255, 255, 255, 0.08);
-    width: 52px;
-    height: 52px;
+    width: 80px;        
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 10px;
+    border-radius: 50%; 
+    flex-shrink: 0;     
+}
+
+.profile-info {
+    display: grid !important;
+    grid-template-columns: 1fr; 
+    gap: 4px;
+    width: 100%;
 }
 
 .profile h3 {
-    font-size: 18px;
+    display: block !important;
+    font-size: 15px;    
     font-weight: 600;
     letter-spacing: 0.3px;
-    margin-bottom: 2px;
+    color: #ffffff;
+    line-height: 1.2;
+    white-space: nowrap;
 }
 
 .profile p {
+    display: block !important;
     color: #adc1b7;
-    font-size: 13px;
+    font-size: 12px;    
     font-weight: 400;
+    white-space: nowrap;
 }
 
 .sidebar nav {
@@ -141,26 +154,54 @@ body {
 .sidebar nav a {
     color: #b7c9c0;
     text-decoration: none;
-    padding: 12px 16px;
+    padding: 14px 16px;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 500;
     transition: var(--transition);
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
+}
+
+.sidebar nav a .material-icons-round {
+    font-size: 26px;
+    transition: var(--transition);
+}
+
+.sidebar nav a:hover .material-icons-round,
+.sidebar nav a.active .material-icons-round {
+    color: #ffffff;
 }
 
 .sidebar nav a:hover {
     color: #ffffff;
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.05);
+    padding-left: 24px;
 }
 
 .sidebar nav a.active {
     color: #ffffff;
-    background: var(--accent);
+    background: rgba(255, 255, 255, 0.1);
     font-weight: 600;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding-left: 24px;
+    position: relative;
+    box-shadow: none;
+}
+
+.sidebar nav a.active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 12%;
+    bottom: 12%;
+    width: 4px;
+    background: var(--accent);
+    border-radius: 0 4px 4px 0;
+}
+
+.sidebar nav a.active .material-icons-round {
+    color: var(--accent);
 }
 
 /* ==========================================================================
@@ -728,6 +769,12 @@ button[type="submit"]:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: var(--transition);
+}
+
+.theme-toggle-btn .material-icons-round {
+    color: #ffffff !important;
+    font-size: 20px;
     transition: var(--transition);
 }
 
