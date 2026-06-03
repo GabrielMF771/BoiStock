@@ -69,7 +69,19 @@ BoiStock/
    npm install
 ```
 
-3. **Incicie o servidor**
+3. **Configurar as credenciais do sistema:**
+Crie um arquivo chamado .env na raiz do projeto e defina as variáveis de ambiente com os dados de acesso do seu servidor MySQL local:
+
+```
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=seu_usuario_mysql
+DB_PASS=sua_senha_mysql
+DB_NAME=boistockdb
+PORT=3000
+```
+
+4. **Incicie o servidor**
 ```bash
    node server.js
 ```
