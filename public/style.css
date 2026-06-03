@@ -65,9 +65,8 @@ body {
 
 .brand-logo {
     font-size: 24px;
-    background: var(--accent-bg);
-    width: 42px;
-    height: 42px;
+    width: 60px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
