@@ -863,34 +863,44 @@ input,
 }
 
 /* ==========================================================================
-   RESPONSIVIDADE E ADAPTAÇÕES DE DISPOSITIVOS
+   RESPONSIVIDADE E ADAPTAÇÕES DE DISPOSITIVOS (MÓBILE, TABLETS E PC)
    ========================================================================== */
-@media(max-width: 1024px) {
+
+/* Telas médias e Tablets em modo Paisagem (Até 1024px) */
+@media (max-width: 1024px) {
     .main-content {
-        padding: 30px;
+        padding: 32px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
     }
 }
 
-@media(max-width: 900px) {
+/* Tablets em modo Retrato e Telas Médias (Até 900px) */
+@media (max-width: 900px) {
     .dashboard {
         flex-direction: column;
     }
 
+    /* Transformação da Sidebar em uma barra de topo unificada */
     .sidebar {
         position: static;
         width: 100%;
-        padding: 24px;
+        padding: 20px 24px;
         border-right: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        gap: 16px;
     }
 
     .profile {
-        margin-bottom: 20px;
-        padding-bottom: 16px;
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
         display: flex;
         align-items: center;
         gap: 16px;
-        border-bottom: none;
     }
 
     .avatar {
@@ -903,8 +913,25 @@ input,
     .sidebar nav {
         flex-direction: row;
         flex-wrap: wrap;
+        gap: 8px;
     }
 
+    .sidebar nav a {
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+
+    .theme-switch-wrapper {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: none;
+        width: auto;
+        position: absolute;
+        top: 22px;
+        right: 24px;
+    }
+
+    /* Ajuste de Margem do Conteúdo Central */
     .main-content {
         margin-left: 0;
         width: 100%;
@@ -913,16 +940,107 @@ input,
 
     .content-grid {
         grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+/* Smartphones e Telas Pequenas (Até 600px) */
+@media (max-width: 600px) {
+    .main-content {
+        padding: 16px;
     }
 
+    .topbar {
+        margin-bottom: 24px;
+    }
+
+    .topbar h1 {
+        font-size: 22px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .stat-card {
+        padding: 18px;
+    }
+
+    .stat-card p {
+        font-size: 24px;
+        margin-top: 8px;
+    }
+
+    .summary-card,
+    .activity-card,
+    .table-card,
+    .form-container {
+        padding: 20px;
+    }
+
+    /* Transformação da lista de simulação de tabela em formato card empilhado */
     #products-list li {
         flex-direction: column;
         align-items: flex-start;
-        gap: 12px;
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .product-info {
+        width: 100%;
+    }
+
+    .product-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 8px;
     }
 
     .actions {
         width: 100%;
         justify-content: flex-end;
+        border-top: 1px solid var(--border-color);
+        padding-top: 12px;
+    }
+    
+    .edit-btn,
+    .delete-btn {
+        flex: 1;
+        text-align: center;
+        padding: 10px;
+    }
+
+    /* Ajustes em inputs e botões de formulário */
+    .form-container {
+        padding: 20px 16px;
+    }
+
+    form:has(.cancel-btn) {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 12px;
+    }
+
+    .btn-primary,
+    button[type="submit"],
+    .cancel-btn {
+        width: 100%;
+        padding: 14px;
+    }
+
+    /* Alinhamento de Toasts em telas móbile */
+    .custom-toast {
+        bottom: 16px;
+        left: 16px;
+        right: 16px;
+        transform: translateY(150%);
+        justify-content: center;
+        text-align: center;
+    }
+
+    .custom-toast.show {
+        transform: translateY(0);
     }
 }

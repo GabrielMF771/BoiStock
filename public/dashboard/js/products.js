@@ -3,7 +3,6 @@ const addProductForm = document.getElementById("add-product-form");
 
 if (productsList) {
     loadProducts();
-    // Executa a verificação de mensagens na URL sempre que a listagem carregar
     verificarNotificacoes();
 }
 
@@ -23,26 +22,45 @@ if (addProductForm) {
             },
             body: JSON.stringify({ name, description, price, quantity })
         })
-            .then(res => res.json())
-            .then(data => {
-                // Redireciona passando o parâmetro de cadastro feito com sucesso
+            .then(res => {
+                if (!res.ok) {
+                    // Se o back-end rejeitar (status 400, por exemplo), captura o erro dele
+                    return res.json().then(err => { throw new Error(err.error); });
+                }
+                return res.json();
+            })
+            .then(resposta => {
+                // Cadastro com sucesso redireciona para a listagem
                 window.location.href = '/dashboard/products?notif=add';
             })
-            .catch(error => console.error('Erro ao adicionar produto:', error));
+            .catch(error => {
+                console.error('Erro ao adicionar produto:', error);
+                criarToast(error.message || 'Erro ao tentar cadastrar o produto.', 'error');
+            });
     });
 }
 
 function loadProducts() {
     fetch('/api/products')
-        .then(res => res.json())
-        .then(products => {
+        .then(res => {
+            if (!res.ok) {
+                return res.json().then(err => { throw new Error(err.error); });
+            }
+            return res.json();
+        })
+        .then(resposta => {
+            const products = resposta.data;
+            
             productsList.innerHTML = '';
+            
+            if (!products || !Array.isArray(products)) return;
+
             products.forEach(product => {
                 const productItem = document.createElement('li');
                 productItem.innerHTML = `
                     <div class="product-info">
                         <strong>${product.name}</strong>
-                        <p>${product.description}</p>
+                        <p>${product.description || 'Sem descrição'}</p>
                         <div class="product-badges">
                             <span class="badge badge-price">R$ ${Number(product.price).toFixed(2).replace('.', ',')}</span>
                             <span class="badge">Estoque: ${product.quantity} unid.</span>
@@ -56,24 +74,22 @@ function loadProducts() {
                 productsList.appendChild(productItem);
             });
         })
-        .catch(error => console.error('Erro ao carregar produtos:', error));
+        .catch(error => {
+            console.error('Erro ao carregar produtos:', error);
+            criarToast('Não foi possível carregar a listagem de produtos.', 'error');
+        });
 }
-
 
 let idProdutoParaDeletar = null;
 
 function deleteProduct(id) {
-    // Guarda o ID do produto selecionado
     idProdutoParaDeletar = id;
-
-    // Abre a janela modal adicionando a classe "show"
     const modal = document.getElementById('delete-modal');
     if (modal) {
         modal.classList.add('show');
     }
 }
 
-// Modal para deletar
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('delete-modal');
     const btnCancelar = document.getElementById('btn-cancel-delete');
@@ -93,20 +109,26 @@ document.addEventListener('DOMContentLoaded', () => {
             fetch(`/api/products/${idProdutoParaDeletar}`, {
                 method: 'DELETE'
             })
-                .then(res => res.json())
-                .then(data => {
-                    // Fecha a modal
+                .then(res => {
+                    if (!res.ok) {
+                        // Captura erros como 404 (não encontrado) ou 500 (banco)
+                        return res.json().then(err => { throw new Error(err.error); });
+                    }
+                    return res.json();
+                })
+                .then(resposta => {
                     modal.classList.remove('show');
                     idProdutoParaDeletar = null;
 
-                    criarToast('❌ Produto removido do inventário.', 'success');
+                    // Usa a mensagem de sucesso que veio direto do servidor
+                    criarToast(`✖ ${resposta.data.message}`, 'success');
 
                     loadProducts();
                 })
                 .catch(error => {
                     console.error('Erro ao deletar produto:', error);
                     modal.classList.remove('show');
-                    criarToast('Erro ao tentar excluir o produto.', 'error');
+                    criarToast(error.message || 'Erro ao tentar excluir o produto.', 'error');
                 });
         });
     }
@@ -130,7 +152,6 @@ function verificarNotificacoes() {
         criarToast('⚠️ Ocorreu um erro ou o produto não existe.', 'error');
     }
 
-    // Limpa a URL para o aviso não reaparecer se o usuário atualizar a página (F5)
     window.history.replaceState({}, document.title, window.location.pathname);
 }
 
