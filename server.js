@@ -7,9 +7,6 @@ const path = require('path')
 // Arquivos estáticos
 app.use(express.static(path.join(__dirname, 'public')))
 
-// Iniciar a conexão com o banco de dados
-const db = require('./db');
-
 // Rota principal
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'))

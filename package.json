@@ -8,7 +8,6 @@
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  
   "keywords": [
     "express",
     "mysql",
@@ -23,8 +22,11 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@prisma/client": "^5.22.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "mysql2": "^3.22.4"
+    "mysql2": "^3.22.4",
+    "nodemon": "^3.1.14",
+    "prisma": "^5.22.0"
   }
 }
