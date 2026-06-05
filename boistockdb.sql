@@ -1,0 +1,12 @@
+CREATE DATABASE IF NOT EXISTS boistockdb;
+USE boistockdb;
+
+CREATE TABLE products(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    price DECIMAL(10,2) NOT NULL,
+    quantity INT NOT NULL DEFAULT(0),
+    created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+

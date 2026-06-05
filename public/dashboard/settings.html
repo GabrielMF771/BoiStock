@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - BoiStock</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
+    <link rel="stylesheet" href="/dashboard/css/dashboard-style.css">
+    <script src="/dashboard/js/theme.js"></script>
+
+</head>
+
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="profile">
+                <div class="avatar">
+                    <img src="/assets/images/image.png"
+                        style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                </div>
+
+                <div class="profile-info">
+                    <h3>AgroBoi - BoiStock</h3>
+                    <p>Gestão Agropecuária</p>
+                </div>
+            </div>
+
+            <nav>
+                <a href="/">
+                    <span class="material-icons-round">home</span> Início
+                </a>
+                <a href="/dashboard">
+                    <span class="material-icons-round">dashboard</span> Dashboard</a>
+                <a href="/dashboard/products">
+                    <span class="material-icons-round">inventory_2</span> Produtos</a>
+                <a href="/dashboard/settings" class="active">
+                    <span class="material-icons-round">settings</span> Configurações</a>
+            </nav>
+
+            <div class="theme-switch-wrapper">
+                <button id="theme-toggle" class="theme-toggle-btn" title="Alternar Tema">
+                    <span class="material-icons-round icon-sun">light_mode</span>
+                    <span class="material-icons-round icon-moon">dark_mode</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-card">
+                <h1>Configurações do Sistema</h1>
+
+                <div class="form-container">
+                    <form id="settings-form">
+                        <div class="form-group">
+                            <label>Alerta de Estoque Crítico (unidades):</label>
+                            <input type="number" id="cfg-critical" min="1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Alerta de Estoque Baixo (unidades):</label>
+                            <input type="number" id="cfg-low" min="1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Intervalo de Atualização da Dashboard:</label>
+                            <select id="cfg-refresh" class="custom-select">
+                                <option value="0">Manual (Apenas ao recarregar)</option>
+                                <option value="60000">A cada 1 minuto</option>
+                                <option value="300000">A cada 5 minutos</option>
+                                <option value="600000">A cada 10 minutos</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn-primary">Salvar Preferências</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/dashboard/js/products.js"></script>
+    <script src="/dashboard/js/settings.js"></script>
+</body>
+
+</html>

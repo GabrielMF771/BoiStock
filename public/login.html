@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - BoiStock</title>
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <div class="avatar">🐂</div>
+            <h2>Acesso Restrito</h2>
+        </div>
+        
+        <form id="login-form">
+            <div class="input-group">
+                <input type="email" id="email" placeholder="E-mail" required />
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Senha" required />
+            </div>
+            <button type="submit" class="btn-login">Entrar no Sistema</button>
+        </form>
+        
+        <p id="error-msg" class="error-message"></p>
+    </div>
+
+    <script src="/js/login.js"></script>
+</body>
+</html>
