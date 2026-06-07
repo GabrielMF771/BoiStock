@@ -1,37 +1,40 @@
-document.addEventListener('DOMContentLoaded', () =>{
-    const loginForm = document.getElementById('login-form')
-    const errorMessage = document.getElementById('error-message')
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
-    login.Form.addEventListener('submit', async (e) => {
-        e.preventDefault()
+    try {
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
 
-        const email = document.getElementById('email').value
-        const password = document.getElementById('password').value
+        const data = await response.json();
 
-        try {
-            const response = await fetch('api/login', {
-                method: 'POST',
-                headers: { 'content-type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            })
+        if (response.ok) {
+            // Salva o token
+            localStorage.setItem('token', data.token);
 
-            const data = await response.json()
-
-            if(data.sucess) {
-                // vai guardar a chave do JWT e a funçao do usuario
-                localStorage.setItem('boistock_token', data.data.token)
-                localStorage.setItem('boistock_role', data.data.role)
-
-                //redireciona para a dashboard
-                window.location.href = '/dashboard/products'
-            } else {
-                errorMsg.textContent = data.error
-                errorMsg.style.display = 'block'
+            // Verifica se a senha é temporária
+            if (data.isTempPassword) {
+                alert('Você está usando uma senha temporária. Por favor, crie uma nova senha.');
+                window.location.href = '/change-password.html';
+                return;
             }
-        } catch (error) {
-            console.error('Erro de conexão:', error)
-            errorMsg.textContent = 'Erro ao conectar com o servidor'
-            errorMsg.style.display = 'block'
+
+            // Redirecionamento com base no cargo
+            if (data.role === 'gerente') {
+                window.location.href = '/dashboard/dashboard.html';
+            } else {
+                // Operador vai direto para a aba de produtos
+                window.location.href = '/dashboard/products.html';
+            }
+        } else {
+            alert(data.error || 'Erro ao fazer login');
         }
-    })
-})
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro de conexão com o servidor.');
+    }
+});

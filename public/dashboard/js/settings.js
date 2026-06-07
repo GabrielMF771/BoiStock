@@ -1,3 +1,14 @@
+// Verifica token e cargo
+const token = localStorage.getItem('token');
+if (!token) window.location.href = '/login.html';
+
+// Decodifica o Token JWT para saber quem está logado
+const payload = JSON.parse(atob(token.split('.')[1]));
+if (payload.role !== 'gerente') {
+    alert('Acesso restrito a gerentes.');
+    window.location.href = '/dashboard/products.html'; // Chuta o operador pros produtos
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('settings-form');
     
@@ -34,4 +45,31 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Configurações aplicadas com sucesso!');
         }
     });
+});
+
+document.getElementById('createUserForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = {
+        name: document.getElementById('newUserName').value,
+        email: document.getElementById('newUserEmail').value,
+        tempPassword: document.getElementById('newUserTempPass').value,
+        role: document.getElementById('newUserRole').value
+    };
+
+    const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+        alert('Usuário criado! Entregue a senha temporária a ele.');
+        e.target.reset();
+    } else {
+        const error = await response.json();
+        alert(error.error);
+    }
 });

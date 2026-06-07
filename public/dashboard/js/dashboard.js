@@ -1,3 +1,14 @@
+// Verifica token e cargo
+const token = localStorage.getItem('token');
+if (!token) window.location.href = '/login.html';
+
+// Decodifica o Token JWT para saber quem está logado
+const payload = JSON.parse(atob(token.split('.')[1]));
+if (payload.role !== 'gerente') {
+    alert('Acesso restrito a gerentes.');
+    window.location.href = '/dashboard/products.html'; // Chuta o operador pros produtos
+}
+
 async function carregarDashboard() {
     try {
         const response = await fetch('/api/products');

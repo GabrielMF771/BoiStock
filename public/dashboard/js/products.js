@@ -3,20 +3,23 @@ const addProductForm = document.getElementById("add-product-form");
 const token = localStorage.getItem('boistock_token');
 const userRole = localStorage.getItem('boistock_role');
 
-//Bloquear o frint-end
-if(!token) window.location.href = '/login';
+// Bloquear o front-end
+if (!token) window.location.href = '/login';
 
 document.addEventListener('DOMContentLoaded', () => {
     if (userRole === 'operador') {
-        //Remove o botão de adicionar
-        const addBtn = document.querySelector('.add-product-btn')
-        if (addBtn) addBtn.remove()
+        // Remove o botão de adicionar (faz a checagem para não dar erro)
+        const addBtn = document.querySelector('.add-product-btn');
+        if (addBtn) addBtn.remove();
 
-            //esconde o menu e as configuraçoes da sidebar
-            document.querySelector('a[href="/dashboard"]').style.display = 'none'
-            document.querySelector('a[href="/dashboard/settings"]').style.display = 'none'
+        // Esconde o menu e as configurações da sidebar
+        const linkDashboard = document.querySelector('a[href="/dashboard"]');
+        const linkSettings = document.querySelector('a[href="/dashboard/settings"]');
+        
+        if (linkDashboard) linkDashboard.style.display = 'none';
+        if (linkSettings) linkSettings.style.display = 'none';
     }
-})
+});
 
 if (productsList) {
     loadProducts();
@@ -83,6 +86,7 @@ function loadProducts() {
                 
                 let botoesHtml = `<button class="btn edit-btn" onclick="editProduct(${product.id})">✎ Editar</button>`;
 
+                // Apenas Gerente vê o botão de excluir
                 if (userRole === 'gerente') {
                     botoesHtml += `<button class="btn delete-btn" onclick="deleteProduct(${product.id})">✖ Excluir</button>`;
                 }

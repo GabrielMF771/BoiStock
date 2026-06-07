@@ -37,7 +37,7 @@ const verificarToken = (req, res, next) => {
       return enviarErro(res, "Sessão expirada ou token inválido. Faça login novamente.", 403);
     }
     
-    // Se o token for válido, salvamos os dados na requisição para usar nas rotas
+    // Salvamos os dados na requisição para usar nas rotas
     req.userId = decoded.id;
     req.userRole = decoded.role;
     next(); 
@@ -53,8 +53,9 @@ const apenasGerente = (req, res, next) => {
 };
 
 // ============================================================================
-// ROTA DE AUTENTICAÇÃO (LOGIN)
+// ROTAS DE AUTENTICAÇÃO E USUÁRIOS
 // ============================================================================
+
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -63,7 +64,6 @@ router.post("/login", async (req, res) => {
       return enviarErro(res, "E-mail e senha são obrigatórios.", 400);
     }
 
-    // Busca o usuário usando o Prisma
     const user = await prisma.user.findUnique({
       where: { email: email }
     });
@@ -72,30 +72,85 @@ router.post("/login", async (req, res) => {
       return enviarErro(res, "Usuário ou senha incorretos.", 401);
     }
 
-    // Compara a senha digitada com a criptografada do banco
     const senhaValida = await bcrypt.compare(password, user.password);
     if (!senhaValida) {
       return enviarErro(res, "Usuário ou senha incorretos.", 401);
     }
 
-    // Gera o Token JWT contendo o ID e o ROLE do usuário
+    // Gera o Token JWT contendo o ID, ROLE e status da senha temporária
     const token = jwt.sign(
-      { id: user.id, role: user.role }, 
+      { id: user.id, role: user.role, isTempPassword: user.isTempPassword }, 
       process.env.JWT_SECRET || "segredo_padrao_temporario", 
       { expiresIn: "8h" }
     );
 
-    // Devolve o token e as informações para o Front-end
     return res.json({ 
       success: true, 
       message: "Login realizado com sucesso",
       token: token,
       role: user.role,
-      name: user.name
+      name: user.name,
+      isTempPassword: user.isTempPassword // Avisa o front se precisa trocar a senha
     });
   } catch (error) {
     console.error("Erro no login:", error);
     return enviarErro(res, "Erro interno no servidor.", 500);
+  }
+});
+
+// Troca de Senha Obrigatória
+router.post('/change-password', verificarToken, async (req, res) => {
+  try {
+    const { newPassword } = req.body;
+    
+    if (!newPassword || newPassword.trim() === "") {
+      return enviarErro(res, "A nova senha não pode estar em branco.", 400);
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await prisma.user.update({
+      where: { id: req.userId },
+      data: { password: hashedPassword, isTempPassword: false }
+    });
+
+    return enviarSucesso(res, { message: 'Senha atualizada com sucesso. Faça login novamente.' });
+  } catch (error) {
+    console.error("Erro ao alterar senha:", error);
+    return enviarErro(res, "Erro ao alterar a senha.", 500);
+  }
+});
+
+// Gerente cria novo usuário
+router.post('/users', verificarToken, apenasGerente, async (req, res) => {
+  try {
+    const { name, email, tempPassword, role } = req.body;
+    
+    if (!name || !email || !tempPassword) {
+      return enviarErro(res, "Nome, e-mail e senha temporária são obrigatórios.", 400);
+    }
+
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      return enviarErro(res, "Este e-mail já está cadastrado no sistema.", 400);
+    }
+
+    const hashedPassword = await bcrypt.hash(tempPassword, 10);
+
+    await prisma.user.create({
+      data: {
+        name: name.trim(),
+        email: email.trim(),
+        password: hashedPassword,
+        role: role || 'operador',
+        isTempPassword: true // Força a troca no primeiro login
+      }
+    });
+
+    return enviarSucesso(res, { message: 'Usuário cadastrado com sucesso!' }, 201);
+  } catch (error) {
+    console.error("Erro ao criar usuário:", error);
+    return enviarErro(res, "Erro ao cadastrar novo funcionário.", 500);
   }
 });
 
@@ -108,36 +163,16 @@ router.post("/products", verificarToken, apenasGerente, async (req, res) => {
   try {
     const { name, description, price, quantity } = req.body;
 
-    // Validação de campos obrigatórios
-    if (
-      !name ||
-      name.trim() === "" ||
-      price === undefined ||
-      quantity === undefined
-    ) {
-      return enviarErro(
-        res,
-        "Os campos nome, preço e quantidade são obrigatórios.",
-        400,
-      );
+    if (!name || name.trim() === "" || price === undefined || quantity === undefined) {
+      return enviarErro(res, "Os campos nome, preço e quantidade são obrigatórios.", 400);
     }
 
-    // Validação de regras de negócio (Valores não negativos)
     if (Number(price) < 0 || Number(quantity) < 0) {
-      return enviarErro(
-        res,
-        "Preço e quantidade não podem assumir valores negativos.",
-        400,
-      );
+      return enviarErro(res, "Preço e quantidade não podem assumir valores negativos.", 400);
     }
 
-    // Validação de tipos numéricos estruturais
     if (isNaN(price) || isNaN(quantity)) {
-      return enviarErro(
-        res,
-        "Preço e quantidade precisam ser valores numéricos válidos.",
-        400,
-      );
+      return enviarErro(res, "Preço e quantidade precisam ser valores numéricos válidos.", 400);
     }
 
     const product = await prisma.product.create({
@@ -149,11 +184,7 @@ router.post("/products", verificarToken, apenasGerente, async (req, res) => {
       },
     });
 
-    return enviarSucesso(
-      res,
-      { id: product.id, message: "Produto criado com sucesso" },
-      201,
-    );
+    return enviarSucesso(res, { id: product.id, message: "Produto criado com sucesso" }, 201);
   } catch (error) {
     console.error("Exceção capturada no cadastro:", error);
     return enviarErro(res, "Erro interno no processamento da requisição.", 500);
@@ -177,11 +208,7 @@ router.get("/products/:id", verificarToken, async (req, res) => {
     const id = Number(req.params.id);
 
     if (isNaN(id)) {
-      return enviarErro(
-        res,
-        "O identificador fornecido na URL deve ser estritamente numérico.",
-        400,
-      );
+      return enviarErro(res, "O identificador fornecido na URL deve ser estritamente numérico.", 400);
     }
 
     const product = await prisma.product.findUnique({ where: { id } });
@@ -197,58 +224,46 @@ router.get("/products/:id", verificarToken, async (req, res) => {
   }
 });
 
-// Editar um produto - PATCH (GERENTE E OPERADOR)
+// Editar um produto - PATCH (GERENTE E OPERADOR, mas com restrições)
 router.patch("/products/:id", verificarToken, async (req, res) => {
   try {
     const id = Number(req.params.id);
     const { name, description, price, quantity } = req.body;
 
     if (isNaN(id)) {
-      return enviarErro(
-        res,
-        "O identificador fornecido na URL deve ser estritamente numérico.",
-        400,
-      );
+      return enviarErro(res, "O identificador fornecido na URL deve ser estritamente numérico.", 400);
+    }
+
+    // REGRA DE NEGÓCIO: Se for operador, bloqueia alteração de nome, descrição ou preço
+    if (req.userRole === 'operador') {
+      if (name !== undefined || description !== undefined || price !== undefined) {
+        return enviarErro(res, "Acesso negado: Operadores podem alterar apenas a quantidade em estoque.", 403);
+      }
     }
 
     const data = {};
 
-    // Validações individuais para payload parcial (PATCH)
     if (name !== undefined) {
-      if (name.trim() === "")
-        return enviarErro(
-          res,
-          "O nome do produto não pode ficar em branco.",
-          400,
-        );
+      if (name.trim() === "") return enviarErro(res, "O nome do produto não pode ficar em branco.", 400);
       data.name = name.trim();
     }
+    
     if (description !== undefined) {
       data.description = description ? description.trim() : null;
     }
 
     if (price !== undefined) {
-      if (isNaN(price) || Number(price) < 0)
-        return enviarErro(res, "Preço inválido ou negativo informado.", 400);
+      if (isNaN(price) || Number(price) < 0) return enviarErro(res, "Preço inválido ou negativo informado.", 400);
       data.price = Number(price);
     }
 
     if (quantity !== undefined) {
-      if (isNaN(quantity) || Number(quantity) < 0)
-        return enviarErro(
-          res,
-          "Quantidade inválida ou negativa informada.",
-          400,
-        );
+      if (isNaN(quantity) || Number(quantity) < 0) return enviarErro(res, "Quantidade inválida ou negativa informada.", 400);
       data.quantity = Number(quantity);
     }
 
     if (Object.keys(data).length === 0) {
-      return enviarErro(
-        res,
-        "Nenhum campo válido foi fornecido para modificação.",
-        400,
-      );
+      return enviarErro(res, "Nenhum campo válido foi fornecido para modificação.", 400);
     }
 
     await prisma.product.update({ where: { id }, data });
@@ -256,11 +271,7 @@ router.patch("/products/:id", verificarToken, async (req, res) => {
     return enviarSucesso(res, { message: "Produto atualizado com sucesso" });
   } catch (error) {
     if (error.code === "P2025") {
-      return enviarErro(
-        res,
-        `Impossível atualizar: Produto com ID ${req.params.id} não existe.`,
-        404,
-      );
+      return enviarErro(res, `Impossível atualizar: Produto com ID ${req.params.id} não existe.`, 404);
     }
     console.error("Exceção capturada na atualização:", error);
     return enviarErro(res, "Erro interno no processamento da requisição.", 500);
@@ -273,25 +284,15 @@ router.delete("/products/:id", verificarToken, apenasGerente, async (req, res) =
     const id = Number(req.params.id);
 
     if (isNaN(id)) {
-      return enviarErro(
-        res,
-        "O identificador fornecido na URL deve ser estritamente numérico.",
-        400,
-      );
+      return enviarErro(res, "O identificador fornecido na URL deve ser estritamente numérico.", 400);
     }
 
     await prisma.product.delete({ where: { id } });
 
-    return enviarSucesso(res, {
-      message: "Produto removido com sucesso do estoque",
-    });
+    return enviarSucesso(res, { message: "Produto removido com sucesso do estoque" });
   } catch (error) {
     if (error.code === "P2025") {
-      return enviarErro(
-        res,
-        `Impossível excluir: Produto com ID ${req.params.id} não foi localizado.`,
-        404,
-      );
+      return enviarErro(res, `Impossível excluir: Produto com ID ${req.params.id} não foi localizado.`, 404);
     }
     console.error("Exceção capturada na remoção:", error);
     return enviarErro(res, "Erro interno no processamento da requisição.", 500);

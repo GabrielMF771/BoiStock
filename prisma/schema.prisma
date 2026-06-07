@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -8,24 +7,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Product {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(100)
-  description String?  @db.Text
-  price       Decimal  @db.Decimal(10, 2)
-  quantity    Int      @default(0)
-  createdAt   DateTime @default(now()) @map("created_At")
-
-  @@map("products")
+model User {
+  id             Int      @id @default(autoincrement())
+  name           String
+  email          String   @unique
+  password       String
+  role           String   @default("operador") // Pode ser "gerente" ou "operador"
+  isTempPassword Boolean  @default(false)      // Controle da senha temporária
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
-model User {
-  id                 Int      @id @default(autoincrement())
-  name               String?
-  email              String   @unique
-  password           String
-  role               String   @default("operator")
-  mustChangePassword Boolean  @default(false)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  sku         String   @unique
+  category    String
+  quantity    Int
+  minQuantity Int
+  price       Float
+  location    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

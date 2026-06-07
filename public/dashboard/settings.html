@@ -12,6 +12,20 @@
 
 </head>
 
+<div class="gerente-only card">
+    <h3>Criar Novo Usuário</h3>
+    <form id="createUserForm">
+        <input type="text" id="newUserName" placeholder="Nome Completo" required>
+        <input type="email" id="newUserEmail" placeholder="E-mail" required>
+        <input type="text" id="newUserTempPass" placeholder="Senha Temporária" required>
+        <select id="newUserRole">
+            <option value="operador">Operador (Estoque apenas)</option>
+            <option value="gerente">Gerente (Acesso total)</option>
+        </select>
+        <button type="submit" class="btn-primary">Cadastrar Funcionário</button>
+    </form>
+</div>
+
 <body>
     <div class="dashboard">
         <aside class="sidebar">
