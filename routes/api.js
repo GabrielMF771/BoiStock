@@ -3,12 +3,12 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
+// Prisma
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
+
 // Modularizar as rotas
 const router = express.Router();
-
-// Prisma client com URL vinda do .env (Docker ou MySQL Workbench)
-const { PrismaClient } = require("../generated/prisma");
-const prisma = new PrismaClient();
 
 // Funções auxiliares para validar erros
 const enviarSucesso = (res, dados, status = 200) => {
@@ -72,14 +72,14 @@ router.post("/login", async (req, res) => {
       return enviarErro(res, "Usuário ou senha incorretos.", 401);
     }
 
-    const senhaValida = await bcrypt.compare(password, user.password);
+   const senhaValida = password === user.password;
     if (!senhaValida) {
       return enviarErro(res, "Usuário ou senha incorretos.", 401);
     }
 
     // Gera o Token JWT contendo o ID, ROLE e status da senha temporária
     const token = jwt.sign(
-      { id: user.id, role: user.role, isTempPassword: user.isTempPassword }, 
+      { id: user.id, role: user.role }, 
       process.env.JWT_SECRET || "segredo_padrao_temporario", 
       { expiresIn: "8h" }
     );
@@ -99,6 +99,8 @@ router.post("/login", async (req, res) => {
 });
 
 // Troca de Senha Obrigatória
+//mais pra frente se der tempo, implementar uma rota para o gerente resetar a senha de um funcionário
+/*
 router.post('/change-password', verificarToken, async (req, res) => {
   try {
     const { newPassword } = req.body;
@@ -115,13 +117,16 @@ router.post('/change-password', verificarToken, async (req, res) => {
     });
 
     return enviarSucesso(res, { message: 'Senha atualizada com sucesso. Faça login novamente.' });
-  } catch (error) {
+    catch (error) {
     console.error("Erro ao alterar senha:", error);
     return enviarErro(res, "Erro ao alterar a senha.", 500);
   }
 });
+*/
 
 // Gerente cria novo usuário
+// Se der tempo, implementar rota para listar usuários e permitir que o gerente desative ou exclua contas
+/*
 router.post('/users', verificarToken, apenasGerente, async (req, res) => {
   try {
     const { name, email, tempPassword, role } = req.body;
@@ -153,6 +158,7 @@ router.post('/users', verificarToken, apenasGerente, async (req, res) => {
     return enviarErro(res, "Erro ao cadastrar novo funcionário.", 500);
   }
 });
+*/
 
 // ============================================================================
 // CRUD DE PRODUTOS

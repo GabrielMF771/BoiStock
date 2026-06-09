@@ -6,12 +6,12 @@ if (!token) window.location.href = '/login.html';
 const payload = JSON.parse(atob(token.split('.')[1]));
 if (payload.role !== 'gerente') {
     alert('Acesso restrito a gerentes.');
-    window.location.href = '/dashboard/products.html'; // Chuta o operador pros produtos
+    window.location.href = '/dashboard/products.html';
 }
 
 async function carregarDashboard() {
     try {
-        const response = await fetch('/api/products');
+        const response = await fetch('http://localhost:3000/api/products');
 
         if (!response.ok) {
             throw new Error('Erro ao carregar dados do servidor');

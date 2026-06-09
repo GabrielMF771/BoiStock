@@ -10,3 +10,13 @@ CREATE TABLE products(
     created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE users (
+   id int NOT NULL AUTO_INCREMENT,
+   name varchar(100) NOT NULL,
+   email varchar(100) NOT NULL,
+   password varchar(200) NOT NULL,
+   role enum('gerente','operador') DEFAULT 'operador',
+   created_at timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+   PRIMARY KEY (id),
+   UNIQUE KEY email (email)
+ );
