@@ -1,5 +1,5 @@
 // Verifica token e cargo
-const token = localStorage.getItem('token');
+const token = localStorage.getItem('boistock_token');
 if (!token) window.location.href = '/login.html';
 
 // Decodifica o Token JWT para saber quem está logado
@@ -11,7 +11,11 @@ if (payload.role !== 'gerente') {
 
 async function carregarDashboard() {
     try {
-        const response = await fetch('http://localhost:3000/api/products');
+        const response = await fetch('http://localhost:3000/api/products', {
+    headers: {
+        Authorization: `Bearer ${token}`
+    }
+});
 
         if (!response.ok) {
             throw new Error('Erro ao carregar dados do servidor');
