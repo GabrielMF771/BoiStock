@@ -9,6 +9,7 @@ const port = process.env.PORT || 3000;
 // Configurações e Middlewares globais
 app.use(cors());
 app.use(express.json()); 
+BigInt.prototype.toJSON = function() { return Number(this); };
 
 // Arquivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
@@ -53,6 +54,10 @@ app.get('/dashboard/settings', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'dashboard', 'settings.html'));
 });
 
+// Rota para troca de senha
+app.get('/change-password', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'change-password.html'));
+});
 
 // ==========================================
 // ROTAS DE BACKEND (API)

@@ -13,22 +13,13 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         const data = await response.json();
 
         if (response.ok) {
-            // Salva o token
-            localStorage.setItem('token', data.token);
+            localStorage.setItem('boistock_token', data.token);
+            localStorage.setItem('boistock_role', data.role);
 
-            // Verifica se a senha é temporária
-            if (data.isTempPassword) {
-                alert('Você está usando uma senha temporária. Por favor, crie uma nova senha.');
-                window.location.href = '/change-password.html';
-                return;
-            }
-
-            // Redirecionamento com base no cargo
             if (data.role === 'gerente') {
-                window.location.href = '/dashboard/dashboard.html';
+                window.location.href = '/dashboard';
             } else {
-                // Operador vai direto para a aba de produtos
-                window.location.href = '/dashboard/products.html';
+                window.location.href = '/dashboard/products';
             }
         } else {
             alert(data.error || 'Erro ao fazer login');

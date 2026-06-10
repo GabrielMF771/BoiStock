@@ -8,7 +8,7 @@ const authMiddleware = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "segredo_padrao_temporario");
     req.user = decoded; // Salva o usuário (id, role, isTemp) na requisição
     next();
   } catch (error) {

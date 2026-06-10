@@ -59,6 +59,7 @@ const apenasGerente = (req, res, next) => {
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log('Tentativa de login:', email, password);
 
     if (!email || !password) {
       return enviarErro(res, "E-mail e senha são obrigatórios.", 400);
@@ -67,12 +68,15 @@ router.post("/login", async (req, res) => {
     const user = await prisma.user.findUnique({
       where: { email: email }
     });
+    
+    console.log('Usuário encontrado:', user);
 
     if (!user) {
       return enviarErro(res, "Usuário ou senha incorretos.", 401);
     }
 
-   const senhaValida = password === user.password;
+   const senhaValida = await bcrypt.compare(password, user.password);
+   console.log('Senha válida:', senhaValida)
     if (!senhaValida) {
       return enviarErro(res, "Usuário ou senha incorretos.", 401);
     }
@@ -83,6 +87,9 @@ router.post("/login", async (req, res) => {
       process.env.JWT_SECRET || "segredo_padrao_temporario", 
       { expiresIn: "8h" }
     );
+
+    console.log('Token gerado:', token);
+    console.log('Role:', user.role);
 
     return res.json({ 
       success: true, 
@@ -99,12 +106,11 @@ router.post("/login", async (req, res) => {
 });
 
 // Troca de Senha Obrigatória
-//mais pra frente se der tempo, implementar uma rota para o gerente resetar a senha de um funcionário
-/*
+
 router.post('/change-password', verificarToken, async (req, res) => {
   try {
     const { newPassword } = req.body;
-    
+
     if (!newPassword || newPassword.trim() === "") {
       return enviarErro(res, "A nova senha não pode estar em branco.", 400);
     }
@@ -113,20 +119,25 @@ router.post('/change-password', verificarToken, async (req, res) => {
 
     await prisma.user.update({
       where: { id: req.userId },
-      data: { password: hashedPassword, isTempPassword: false }
+      data: {
+        password: hashedPassword,
+        isTempPassword: false
+      }
     });
 
-    return enviarSucesso(res, { message: 'Senha atualizada com sucesso. Faça login novamente.' });
-    catch (error) {
+    return enviarSucesso(res, {
+      message: 'Senha atualizada com sucesso. Faça login novamente.'
+    });
+
+  } catch (error) {
     console.error("Erro ao alterar senha:", error);
     return enviarErro(res, "Erro ao alterar a senha.", 500);
   }
 });
-*/
 
 // Gerente cria novo usuário
 // Se der tempo, implementar rota para listar usuários e permitir que o gerente desative ou exclua contas
-/*
+
 router.post('/users', verificarToken, apenasGerente, async (req, res) => {
   try {
     const { name, email, tempPassword, role } = req.body;
@@ -158,7 +169,6 @@ router.post('/users', verificarToken, apenasGerente, async (req, res) => {
     return enviarErro(res, "Erro ao cadastrar novo funcionário.", 500);
   }
 });
-*/
 
 // ============================================================================
 // CRUD DE PRODUTOS
