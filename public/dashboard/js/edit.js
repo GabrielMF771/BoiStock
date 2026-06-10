@@ -13,6 +13,8 @@ if (editProductForm) {
     editProductForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
+        const token = localStorage.getItem('boistock_token');
+
         const name = document.getElementById('name').value;
         const description = document.getElementById('description').value;
         const price = document.getElementById('price').value;
@@ -21,7 +23,8 @@ if (editProductForm) {
         fetch(`/api/products/${productId}`, {
             method: 'PATCH',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({ name, description, price, quantity })
         })
@@ -46,7 +49,13 @@ if (editProductForm) {
 }
 
 function carregarDadosDoProduto(id) {
-    fetch(`/api/products/${id}`)
+    const token = localStorage.getItem('boistock_token');
+
+    fetch(`/api/products/${id}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
         .then(res => {
             if (!res.ok) {
                 return res.json().then(err => { throw new Error(err.error); });

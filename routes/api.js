@@ -20,7 +20,7 @@ const enviarErro = (res, mensagem, status = 500) => {
 };
 
 // ============================================================================
-// MIDDLEWARES DE SEGURANÇA (OS "PORTEIROS")
+// MIDDLEWARES DE SEGURANÇA
 // ============================================================================
 
 // 1. Verifica se o usuário enviou uma pulseira (Token) válida
