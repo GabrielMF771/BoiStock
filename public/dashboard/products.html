@@ -9,7 +9,6 @@
     <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
     <link rel="stylesheet" href="/dashboard/css/dashboard-style.css">
     <script src="/dashboard/js/theme.js"></script>
-
 </head>
 
 <body>
@@ -33,12 +32,18 @@
                 <a href="/">
                     <span class="material-icons-round">home</span> Início
                 </a>
-                <a href="/dashboard">
-                    <span class="material-icons-round">dashboard</span> Dashboard</a>
+                <a href="/dashboard" id="link-dashboard">
+                    <span class="material-icons-round">dashboard</span> Dashboard
+                </a>
                 <a href="/dashboard/products" class="active">
-                    <span class="material-icons-round">inventory_2</span> Produtos</a>
-                <a href="/dashboard/settings">
-                    <span class="material-icons-round">settings</span> Configurações</a>
+                    <span class="material-icons-round">inventory_2</span> Produtos
+                </a>
+                <a href="/dashboard/settings" id="link-settings">
+                    <span class="material-icons-round">settings</span> Configurações
+                </a>
+                <a href="/" id="btn-logout" style="color: #e74c3c;">
+                    <span class="material-icons-round">logout</span> Sair
+                </a>
             </nav>
 
             <div class="theme-switch-wrapper">
@@ -85,6 +90,7 @@
     </div>
 
     <script src="/dashboard/js/products.js"></script>
+    <script src="/dashboard/js/logout.js"></script>
 </body>
 
 </html>

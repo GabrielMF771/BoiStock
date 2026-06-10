@@ -16,13 +16,20 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             localStorage.setItem('boistock_token', data.token);
             localStorage.setItem('boistock_role', data.role);
 
+            if (data.isTempPassword) {
+                window.location.href = '/change-password';
+                return;
+            }
+
             if (data.role === 'gerente') {
                 window.location.href = '/dashboard';
             } else {
                 window.location.href = '/dashboard/products';
             }
         } else {
-            alert(data.error || 'Erro ao fazer login');
+            const errorDiv = document.getElementById('loginError');
+            errorDiv.textContent = data.error || 'Erro ao fazer login';
+            errorDiv.style.display = 'block';
         }
     } catch (error) {
         console.error('Erro:', error);
