@@ -11,7 +11,7 @@
                 return;
             }
  
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('boistock_token');
  
             try {
                 const response = await fetch('/api/change-password', {
