@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (response.ok) {
-            criarToast('✅ Usuário criado! Entregue a senha temporária a ele.', 'success');
+            criarToast('Usuário criado! Entregue a senha temporária a ele.', 'success');
             e.target.reset();
         } else {
             const error = await response.json();
