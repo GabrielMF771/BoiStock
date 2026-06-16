@@ -7,7 +7,7 @@
     <title>Editar Produto - BoiStock</title>
     <link rel="stylesheet" href="/dashboard/css/dashboard-style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round">
-    <link rel="icon" type="image/x-icon" href="/assets/favicon/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <script src="/dashboard/js/theme.js"></script>
 
 </head>
@@ -60,7 +60,6 @@
                 <h1>Atualizar Produto</h1>
 
                 <div class="form-container">
-
                     <form id="edit-product-form">
                         <input type="text" id="name" placeholder="Nome do produto" required />
                         <input type="text" id="description" placeholder="Descrição" required />
@@ -69,16 +68,13 @@
                         <button type="submit" class="btn-primary">
                             Salvar Alterações
                         </button>
-
-                        <button type="button" class="cancel-btn" onclick="window.location.href='/dashboard/products'">
-                            Descartar
-                        </button>
                     </form>
                 </div>
             </div>
         </main>
     </div>
 
+    <script src="/dashboard/js/logout.js"></script>
     <script src="/dashboard/js/edit.js"></script>
 </body>
 

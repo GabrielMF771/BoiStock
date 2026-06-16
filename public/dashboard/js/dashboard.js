@@ -1,12 +1,16 @@
 // Verifica token e cargo
 const token = localStorage.getItem('boistock_token');
-if (!token) window.location.href = '/login.html';
 
-// Decodifica o Token JWT para saber quem está logado
-const payload = JSON.parse(atob(token.split('.')[1]));
-if (payload.role !== 'gerente') {
-    alert('Acesso restrito a gerentes.');
-    window.location.href = '/dashboard/products.html';
+if (!token) {
+    window.location.replace('/login.html');
+} else {
+    // Decodifica o Token JWT para saber quem está logado
+    const payload = JSON.parse(atob(token.split('.')[1]));
+
+    if (payload.role !== 'gerente') {
+        alert('Acesso restrito a gerentes.');
+        window.location.replace('/dashboard/products.html');
+    }
 }
 
 async function carregarDashboard() {
