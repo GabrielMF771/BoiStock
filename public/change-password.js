@@ -11,7 +11,7 @@
                 return;
             }
  
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('boistock_token');
  
             try {
                 const response = await fetch('/api/change-password', {
@@ -25,7 +25,7 @@
  
                 if (response.ok) {
                     alert('Senha atualizada! Faça login novamente.');
-                    localStorage.removeItem('token');
+                    localStorage.removeItem('boistock_token');
                     window.location.href = '/login';
                 } else {
                     msgBox.textContent = 'Erro ao atualizar a senha.';

@@ -1,7 +1,22 @@
 const urlSegments = window.location.pathname.split('/');
 const productId = urlSegments[urlSegments.length - 1];
+const editToken = localStorage.getItem('boistock_token');
+const editRole = localStorage.getItem('boistock_role');
 
 const editProductForm = document.getElementById("edit-product-form");
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (editRole === 'operador') {
+        const linkDashboard = document.getElementById('link-dashboard');
+        const linkSettings = document.getElementById('link-settings');
+        if (linkDashboard) linkDashboard.style.display = 'none';
+        if (linkSettings) linkSettings.style.display = 'none';
+
+        document.getElementById('name').readOnly = true;
+        document.getElementById('description').readOnly = true;
+        document.getElementById('price').readOnly = true;
+    }
+});
 
 if (productId && !isNaN(productId)) {
     carregarDadosDoProduto(productId);
@@ -13,17 +28,25 @@ if (editProductForm) {
     editProductForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        const name = document.getElementById('name').value;
-        const description = document.getElementById('description').value;
-        const price = document.getElementById('price').value;
-        const quantity = document.getElementById('quantity').value;
+        let body;
+        if (editRole === 'operador') {
+            body = { quantity: document.getElementById('quantity').value };
+        } else {
+            body = {
+                name: document.getElementById('name').value,
+                description: document.getElementById('description').value,
+                price: document.getElementById('price').value,
+                quantity: document.getElementById('quantity').value
+            };
+        }
 
         fetch(`/api/products/${productId}`, {
             method: 'PATCH',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${editToken}`
             },
-            body: JSON.stringify({ name, description, price, quantity })
+            body: JSON.stringify(body)
         })
             .then(res => {
                 if (!res.ok) {
@@ -31,22 +54,20 @@ if (editProductForm) {
                 }
                 return res.json();
             })
-            .then(resposta => {
+            .then(() => {
                 window.location.href = '/dashboard/products?notif=edit';
             })
             .catch(error => {
                 console.error('Erro ao atualizar produto:', error);
-                if (typeof criarToast === 'function') {
-                    criarToast(error.message || 'Erro ao salvar alterações.', 'error');
-                } else {
-                    alert(error.message || 'Erro ao salvar alterações.');
-                }
+                alert(error.message || 'Erro ao salvar alterações.');
             });
     });
 }
 
 function carregarDadosDoProduto(id) {
-    fetch(`/api/products/${id}`)
+    fetch(`/api/products/${id}`, {
+        headers: { 'Authorization': `Bearer ${editToken}` }
+    })
         .then(res => {
             if (!res.ok) {
                 return res.json().then(err => { throw new Error(err.error); });

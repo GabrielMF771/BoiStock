@@ -40,8 +40,8 @@ async function carregarDashboard() {
 
 function atualizarCards(produtos) {
     const totalProdutos = produtos.length;
-    const limiteEstoqueBaixo = Number(localStorage.getItem('cfg_low_limit')) || 10;
-    const limiteCritico = Number(localStorage.getItem('cfg_critical_limit')) || 3;
+    const limiteEstoqueBaixo = 10;
+    const limiteCritico = 3;
 
     const estoqueBaixo = produtos.filter(
         produto => Number(produto.quantity) <= limiteEstoqueBaixo

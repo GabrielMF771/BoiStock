@@ -35,7 +35,7 @@
                     <span class="material-icons-round">inventory_2</span> Produtos</a>
                 <a href="/dashboard/settings" class="active">
                     <span class="material-icons-round">settings</span> Configurações</a>
-                    <a href="#" id="btn-logout" style="margin-top: auto; color: #e74c3c;">
+                <a href="#" id="btn-logout" style="margin-top: auto; color: #e74c3c;">
                     <span class="material-icons-round">logout</span> Sair
                 </a>
             </nav>
@@ -49,35 +49,6 @@
         </aside>
 
         <main class="main-content">
-            <div class="page-card">
-                <h1>Configurações do Sistema</h1>
-
-                <div class="form-container">
-                    <form id="settings-form">
-                        <div class="form-group">
-                            <label>Alerta de Estoque Crítico (unidades):</label>
-                            <input type="number" id="cfg-critical" min="1" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Alerta de Estoque Baixo (unidades):</label>
-                            <input type="number" id="cfg-low" min="1" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Intervalo de Atualização da Dashboard:</label>
-                            <select id="cfg-refresh" class="custom-select">
-                                <option value="0">Manual (Apenas ao recarregar)</option>
-                                <option value="60000">A cada 1 minuto</option>
-                                <option value="300000">A cada 5 minutos</option>
-                                <option value="600000">A cada 10 minutos</option>
-                            </select>
-                        </div>
-
-                        <button type="submit" class="btn-primary">Salvar Preferências</button>
-                    </form>
-                </div>
-            </div>
 
             <div class="page-card" style="margin-top: 2rem;">
                 <h2>Cadastrar Novo Funcionário</h2>
