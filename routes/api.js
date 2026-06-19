@@ -136,7 +136,6 @@ router.post('/change-password', verificarToken, async (req, res) => {
 });
 
 // Gerente cria novo usuário
-// Se der tempo, implementar rota para listar usuários e permitir que o gerente desative ou exclua contas
 
 router.post('/users', verificarToken, apenasGerente, async (req, res) => {
   try {
