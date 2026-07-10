@@ -156,7 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     modal.classList.remove('show');
                     idProdutoParaDeletar = null;
 
-                    // Usa a mensagem de sucesso que veio direto do servidor
                     criarToast(`✖ ${resposta.data.message}`, 'success');
 
                     loadProducts();
